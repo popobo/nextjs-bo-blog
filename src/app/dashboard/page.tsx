@@ -15,7 +15,7 @@ const DashboardPage = () => {
   return (
     <div>
       <p>Hello world!</p>
-      <p>{data}</p>
+      <div>{data && data.map((item) => <p key={item.id}>{item.email}</p>)}</div>
       <Button onClick={() => utils.test.invalidate()}>
         {isFetching || isLoading ? 'Loading' : 'Click me'}
       </Button>

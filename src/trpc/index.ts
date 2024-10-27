@@ -1,18 +1,17 @@
 import { publicProcedure, router } from '@/trpc/trpc'
 import { TRPCError } from '@trpc/server'
+import { db } from '@/db'
 
 export const appRouter = router({
-  test: publicProcedure.query(() => {
-    const randomNumber = Math.random()
-
-    if (randomNumber > 0.1) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Random error',
-      })
-    } else {
-      return String(randomNumber)
-    }
+  test: publicProcedure.query(async () => {
+    await db.user.create({
+      data: {
+        email: String(Math.random()),
+        password: String(Math.random()),
+      },
+    })
+    const res = await db.user.findMany()
+    return res
   }),
 })
 
