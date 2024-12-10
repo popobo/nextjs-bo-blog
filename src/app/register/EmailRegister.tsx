@@ -55,7 +55,7 @@ function EmailRegister() {
       clearErrors('confirmPassword')
     }
   }, [password, confirmPassword, setError, clearErrors])
-  const { mutate: startEmailRegister, isLoading: emailRegisterLoading } =
+  const { mutate: startEmailRegister, status: emailRegisterLoading } =
     trpc.emailRegister.useMutation({
       onSuccess: (user) => {
         if (user && user.id) {
@@ -90,7 +90,7 @@ function EmailRegister() {
     [setError, startEmailRegister]
   )
 
-  const { mutate: startActiveEmail, isLoading: emailActiveLoading } =
+  const { mutate: startActiveEmail, status: emailActiveLoading } =
     trpc.emailActive.useMutation({
       onSuccess: (data) => {
         if (data && data.status === 'success') {
@@ -157,9 +157,12 @@ function EmailRegister() {
                 className="min-w-max text-zinc-500"
                 variant={'outline'}
                 type="button"
-                disabled={emailActiveLoading}
+                disabled={
+                  emailActiveLoading !== 'idle' &&
+                  emailActiveLoading !== 'success'
+                }
               >
-                {emailActiveLoading && (
+                {emailActiveLoading === 'pending' && (
                   <Loader2 className="mr-1 h-4 w-4 animate-spin" />
                 )}
                 激活{emailActiveLoading ? '中' : ''}
@@ -232,9 +235,12 @@ function EmailRegister() {
           <Button
             className="w-full"
             type="submit"
-            disabled={emailRegisterLoading}
+            disabled={
+              emailRegisterLoading !== 'idle' &&
+              emailRegisterLoading !== 'success'
+            }
           >
-            {emailRegisterLoading && (
+            {emailRegisterLoading === 'pending' && (
               <Loader2 className="mr-4 h-4 w-4 animate-spin text-white" />
             )}
             注册
