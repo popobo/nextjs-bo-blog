@@ -165,7 +165,7 @@ function EmailRegister() {
                 {emailActiveLoading === 'pending' && (
                   <Loader2 className="mr-1 h-4 w-4 animate-spin" />
                 )}
-                激活{emailActiveLoading ? '中' : ''}
+                激活{emailActiveLoading === 'pending' ? '中' : ''}
               </Button>
             </div>
 
