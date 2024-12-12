@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from '@/hooks/use-toast'
 import {
   Toast,
   ToastClose,
@@ -8,7 +8,8 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
-} from "@/components/ui/toast"
+} from '@/components/ui/toast'
+import { CheckCircle, CircleOff } from 'lucide-react'
 
 export function Toaster() {
   const { toasts } = useToast()
@@ -25,6 +26,11 @@ export function Toaster() {
               )}
             </div>
             {action}
+            {props.variant === 'default' ? (
+              <CheckCircle className="text-primary" />
+            ) : (
+              <CircleOff />
+            )}
             <ToastClose />
           </Toast>
         )
