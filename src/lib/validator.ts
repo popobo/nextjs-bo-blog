@@ -8,7 +8,7 @@ const passwordSchema = z.string().refine(
     /\d/.test(password) && // 包含数字
     /[a-z]/.test(password) && // 包含小写字母
     /[A-Z]/.test(password) && // 包含大写字母
-    /\W_/.test(password), // 包含符号
+    /\W/.test(password), // 包含符号
   {
     message: '密码必须包含数字、小写字母、大写字母和符号，长度在 8 到 20 之间',
   }
