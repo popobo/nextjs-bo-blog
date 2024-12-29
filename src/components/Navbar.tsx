@@ -14,6 +14,9 @@ export function Navbar() {
           <Button asChild variant="ghost">
             <Link href="/login">登录</Link>
           </Button>
+          <Button asChild variant="ghost">
+            <Link href="/register">注册</Link>
+          </Button>
         </div>
       </div>
     </nav>

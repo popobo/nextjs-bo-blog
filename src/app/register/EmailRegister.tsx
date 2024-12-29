@@ -124,9 +124,7 @@ function EmailRegister() {
   return (
     <Card>
       <CardHeader>
-        <CardDescription>
-          邮箱注册后可绑定手机号登录，先点激活更快获取激活码
-        </CardDescription>
+        <CardDescription>先点激活更快获取激活码</CardDescription>
       </CardHeader>
       <form
         id="emailRegister"
@@ -157,10 +155,7 @@ function EmailRegister() {
                 className="min-w-max text-zinc-500"
                 variant={'outline'}
                 type="button"
-                disabled={
-                  emailActiveLoading !== 'idle' &&
-                  emailActiveLoading !== 'success'
-                }
+                disabled={emailActiveLoading === 'pending'}
               >
                 {emailActiveLoading === 'pending' && (
                   <Loader2 className="mr-1 h-4 w-4 animate-spin" />

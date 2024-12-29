@@ -5,7 +5,9 @@ import { z } from 'zod'
 import { hash, compare } from 'bcryptjs'
 import { getEmailTemplate, handleErrorForInitiative } from '@/lib/utils'
 import { emailMessages } from '@/lib/tips'
+import { ManualTRPCError } from '@/lib/utils'
 import { sendEmail } from '@/lib/sendEmail'
+import { getMessages } from '@/lib/tips'
 
 export const appRouter = router({
   test: publicProcedure.query(async () => {
@@ -101,6 +103,17 @@ export const appRouter = router({
     .mutation(async ({ input }) => {
       try {
         const { email } = input
+        // 检查邮箱是否已注册
+        const user = await db.user.findFirst({
+          where: {
+            email,
+          },
+        })
+
+        if (user) {
+          throw new ManualTRPCError('BAD_REQUEST', getMessages('10018'))
+        }
+
         // 创建激活码
         const hashedEmail = await hash(email, 10)
         // 保存激活码 => 不存在email就创建，存在就更新

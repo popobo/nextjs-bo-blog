@@ -1,7 +1,7 @@
 // src/lib/sendEmail.ts
 import nodemailer from 'nodemailer'
-import { ManualTRPCError } from './utils'
-import { getMessages } from './tips'
+import { ManualTRPCError } from '@/lib/utils'
+import { getMessages } from '@/lib/tips'
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
