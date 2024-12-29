@@ -2,7 +2,7 @@ import { publicProcedure, router } from '@/trpc/trpc'
 import { TRPCError } from '@trpc/server'
 import { db } from '@/db'
 import { z } from 'zod'
-import { hash } from 'bcryptjs'
+import { hash, compare } from 'bcryptjs'
 import { getEmailTemplate, handleErrorForInitiative } from '@/lib/utils'
 import { emailMessages } from '@/lib/tips'
 import { sendEmail } from '@/lib/sendEmail'
@@ -126,6 +126,55 @@ export const appRouter = router({
           html: getEmailTemplate(hashedEmail, email),
         })
         return { status: 'success' }
+      } catch (error) {
+        console.log(error)
+        handleErrorForInitiative(error)
+      }
+    }),
+
+  login: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        password: z.string().min(6),
+      })
+    )
+    .mutation(async ({ input }) => {
+      try {
+        const { email, password } = input
+
+        // 查找用户
+        const user = await db.user.findUnique({
+          where: { email },
+        })
+
+        if (!user) {
+          throw new TRPCError({
+            code: 'UNAUTHORIZED',
+            message: '用户不存在',
+          })
+        }
+
+        // 验证密码
+        if (!user.password) {
+          throw new TRPCError({
+            code: 'UNAUTHORIZED',
+            message: '密码错误',
+          })
+        }
+        const isValid = await compare(password, user.password)
+        if (!isValid) {
+          throw new TRPCError({
+            code: 'UNAUTHORIZED',
+            message: '密码错误',
+          })
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        }
       } catch (error) {
         handleErrorForInitiative(error)
       }

@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import { cn } from '@/lib/utils'
+import { cn } from '../lib/utils'
 import './globals.css'
-import Providers from '@/components/Providers'
-import { Toaster } from '@/components/ui/toaster'
+import Providers from '../components/Providers'
+import { Toaster } from '../components/ui/toaster'
+import { Navbar } from '../components/Navbar'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -35,7 +36,10 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          {children}
+          <Navbar />
+          <main className="pt-16">
+            {children}
+          </main>
           <Toaster />
         </Providers>
       </body>
